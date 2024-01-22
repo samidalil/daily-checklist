@@ -1,35 +1,89 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import viteLogo from "/vite.svg";
+import { useCallback, useState } from "react";
+import {
+  MdDeleteForever,
+  MdDeleteSweep,
+  MdLibraryAddCheck,
+  MdOutlineDeleteForever,
+  MdVisibility,
+  MdVisibilityOff,
+} from "react-icons/md";
+import classNames from "classnames";
+
+import IconToggle from "./components/common/IconToggle";
+import TaskForm from "./components/TaskForm";
+import TaskList from "./components/TaskList";
+import useTasks from "./hooks/useTasks";
+import useToggler from "./hooks/useToggler";
 import "./App.css";
 
-function App() {
-  const [count, setCount] = useState(0);
+export default function App() {
+  const [showCompletedTasks, toggleShowCompletedTasks] = useToggler(false);
+  const [isDeleting, setIsDeleting] = useState(false);
+  const [deleteIds, setDeleteIds] = useState<string[]>([]);
+  const { tasks, addTask, toggleTask, completeAllTasks, deleteTasks } =
+    useTasks();
+
+  const toggleShouldDeleteTask = useCallback(
+    (id: string) => {
+      setDeleteIds((ids) =>
+        ids.includes(id) ? ids.filter((i) => i !== id) : [...ids, id],
+      );
+    },
+    [setDeleteIds],
+  );
+  const applyDeleteTasks = useCallback(() => {
+    deleteTasks(deleteIds);
+    setDeleteIds([]);
+  }, [deleteIds, deleteTasks]);
+  const toggleIsDeleting = useCallback(() => {
+    setIsDeleting((isDeleting) => {
+      if (isDeleting) {
+        setDeleteIds([]);
+      }
+      return !isDeleting;
+    });
+  }, [setDeleteIds, setIsDeleting]);
 
   return (
-    <>
-      <div>
-        <a href="https://vitejs.dev" target="_blank">
-          <img src={viteLogo} className="logo" alt="Vite logo" />
-        </a>
-        <a href="https://react.dev" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
+    <div className="app-container">
+      <h1>Daily Tasks !</h1>
+
+      <div className="button-row-container">
+        <button
+          className={classNames({ hidden: isDeleting })}
+          onClick={completeAllTasks}
+          children={<MdLibraryAddCheck />}
+        />
+        <button
+          className={classNames({ hidden: !isDeleting })}
+          onClick={applyDeleteTasks}
+          children={<MdDeleteSweep />}
+        />
+        <IconToggle
+          toggled={isDeleting}
+          on={<MdDeleteForever />}
+          off={<MdOutlineDeleteForever />}
+          onClick={toggleIsDeleting}
+        />
+        <IconToggle
+          toggled={showCompletedTasks}
+          on={<MdVisibility />}
+          off={<MdVisibilityOff />}
+          onClick={toggleShowCompletedTasks}
+        />
       </div>
-      <h1>Vite + React</h1>
-      <div className="card">
-        <button onClick={() => setCount((count) => count + 1)}>
-          count is {count}
-        </button>
-        <p>
-          Edit <code>src/App.tsx</code> and save to test HMR
-        </p>
-      </div>
-      <p className="read-the-docs">
-        Click on the Vite and React logos to learn more
-      </p>
-    </>
+
+      <TaskList
+        tasks={tasks}
+        selectedIds={deleteIds}
+        showCompletedTasks={showCompletedTasks}
+        toggleTask={isDeleting ? toggleShouldDeleteTask : toggleTask}
+      />
+
+      <TaskForm
+        className={classNames({ hidden: isDeleting })}
+        onSubmit={addTask}
+      />
+    </div>
   );
 }
-
-export default App;

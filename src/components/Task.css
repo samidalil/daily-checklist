@@ -1,0 +1,22 @@
+.task {
+  opacity: 1;
+
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+
+  transition: all 0.3s ease;
+
+  overflow-wrap: break-word;
+  word-break: break-all;
+}
+
+.task.completed {
+  opacity: 0.5;
+
+  text-decoration: line-through;
+}
+
+.task.selected {
+  border-color: #646cff50;
+}

@@ -1,0 +1,15 @@
+.icon-toggle {
+  display: inline-grid;
+}
+
+.icon-toggle .icon {
+  opacity: 1;
+
+  grid-area: 1 / 1;
+
+  transition: all 0.2s ease;
+}
+
+.icon-toggle .icon.hidden-icon {
+  opacity: 0;
+}
