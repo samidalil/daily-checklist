@@ -1,0 +1,11 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="0 0 500 500" xmlns="http://www.w3.org/2000/svg">
+  <rect x="50" y="50" width="400" height="400" style="fill: rgb(0, 0, 0);" rx="80" transform="matrix(0.9999999999999999, 0, 0, 0.9999999999999999, 0, -2.842170943040401e-14)"/>
+  <rect x="100" y="150" width="200" height="40" style="fill: rgb(255, 255, 255)" rx="15" transform="matrix(0.9999999999999999, 0, 0, 0.9999999999999999, 0, -2.842170943040401e-14)"/>
+  <rect x="100" y="220" width="160" height="40" style="fill: rgb(255, 255, 255)" rx="15" transform="matrix(0.9999999999999999, 0, 0, 0.9999999999999999, 0, -2.842170943040401e-14)"/>
+  <rect x="100" y="290" width="100" height="40" style="fill: rgb(255, 255, 255)" rx="15" transform="matrix(0.9999999999999999, 0, 0, 0.9999999999999999, 0, -2.842170943040401e-14)"/>
+  <g transform="matrix(0.9999999999999999, 0, 0, 0.9999999999999999, 30.700345993041992, -19.055385589599624)">
+    <polyline stroke="black" stroke-width="80" points="240.115 262.704 270.115 312.704 373.405 204.935" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+    <polyline stroke="white" stroke-width="40" points="240.115 262.704 270.115 312.704 373.405 204.935" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+</svg>
