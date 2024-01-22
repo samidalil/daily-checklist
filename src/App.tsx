@@ -16,6 +16,8 @@ import useTasks from "./hooks/useTasks";
 import useToggler from "./hooks/useToggler";
 import "./App.css";
 
+import favicon from "/favicon.svg";
+
 export default function App() {
   const [showCompletedTasks, toggleShowCompletedTasks] = useToggler(false);
   const [isDeleting, setIsDeleting] = useState(false);
@@ -45,45 +47,52 @@ export default function App() {
   }, [setDeleteIds, setIsDeleting]);
 
   return (
-    <div className="app-container">
-      <h1>Daily Tasks !</h1>
-
-      <div className="button-row-container">
-        <button
-          className={classNames({ hidden: isDeleting })}
-          onClick={completeAllTasks}
-          children={<MdLibraryAddCheck />}
-        />
-        <button
-          className={classNames({ hidden: !isDeleting })}
-          onClick={applyDeleteTasks}
-          children={<MdDeleteSweep />}
-        />
-        <IconToggle
-          toggled={isDeleting}
-          on={<MdDeleteForever />}
-          off={<MdOutlineDeleteForever />}
-          onClick={toggleIsDeleting}
-        />
-        <IconToggle
-          toggled={showCompletedTasks}
-          on={<MdVisibility />}
-          off={<MdVisibilityOff />}
-          onClick={toggleShowCompletedTasks}
-        />
+    <>
+      <div className="app-title">
+        <div className="image-container">
+          <img src={favicon} width={60} height={60} alt="logo" />
+        </div>
+        <h1>Daily Tasks</h1>
       </div>
 
-      <TaskList
-        tasks={tasks}
-        selectedIds={deleteIds}
-        showCompletedTasks={showCompletedTasks}
-        toggleTask={isDeleting ? toggleShouldDeleteTask : toggleTask}
-      />
+      <div className="app-container">
+        <div className="button-row-container">
+          <button
+            className={classNames({ hidden: isDeleting })}
+            onClick={completeAllTasks}
+            children={<MdLibraryAddCheck />}
+          />
+          <button
+            className={classNames({ hidden: !isDeleting })}
+            onClick={applyDeleteTasks}
+            children={<MdDeleteSweep />}
+          />
+          <IconToggle
+            toggled={isDeleting}
+            on={<MdDeleteForever />}
+            off={<MdOutlineDeleteForever />}
+            onClick={toggleIsDeleting}
+          />
+          <IconToggle
+            toggled={showCompletedTasks}
+            on={<MdVisibility />}
+            off={<MdVisibilityOff />}
+            onClick={toggleShowCompletedTasks}
+          />
+        </div>
 
-      <TaskForm
-        className={classNames({ hidden: isDeleting })}
-        onSubmit={addTask}
-      />
-    </div>
+        <TaskList
+          tasks={tasks}
+          selectedIds={deleteIds}
+          showCompletedTasks={showCompletedTasks}
+          toggleTask={isDeleting ? toggleShouldDeleteTask : toggleTask}
+        />
+
+        <TaskForm
+          className={classNames({ hidden: isDeleting })}
+          onSubmit={addTask}
+        />
+      </div>
+    </>
   );
 }
