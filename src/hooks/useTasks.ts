@@ -1,12 +1,32 @@
-import { useCallback, useEffect, useRef } from "react";
+import { useCallback } from "react";
 
 import type { TaskType } from "../types";
 import generateId from "../utils/createId";
 import useLocalStorage from "./useLocalStorage";
 
 export default function useTasks() {
-  const [tasks, setTasks] = useLocalStorage<TaskType[]>("tasks", []);
-  const initializedRef = useRef(false);
+  const [tasks, setTasks] = useLocalStorage<TaskType[]>("tasks", (tasks) => {
+    if (!tasks) {
+      return [];
+    }
+
+    const now = Date.now();
+    const startTimeOfCurrentDay = now - (now % (1000 * 60 * 60 * 24));
+
+    return (tasks as TaskType[]).map((task) => {
+      const completedAt = new Date(task.completedAt || "");
+      const completed =
+        task.completed && !isNaN(completedAt.getTime())
+          ? completedAt.getTime() >= startTimeOfCurrentDay
+          : false;
+
+      return {
+        ...task,
+        completed,
+        completedAt: completed ? completedAt : null,
+      };
+    });
+  });
 
   const addTask = useCallback(
     (title: string) => {
@@ -56,22 +76,6 @@ export default function useTasks() {
     },
     [setTasks],
   );
-
-  useEffect(() => {
-    if (!initializedRef.current) {
-      const currentDay = new Date().getDay();
-
-      setTasks((tasks) =>
-        tasks.map((task) => ({
-          ...task,
-          completed: task.completed
-            ? task.completedAt?.getDay() === currentDay
-            : false,
-        })),
-      );
-      initializedRef.current = true;
-    }
-  }, [initializedRef, setTasks]);
 
   return {
     tasks,
